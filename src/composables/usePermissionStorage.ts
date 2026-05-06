@@ -2,6 +2,7 @@ import { computed, inject, ref } from 'vue'
 import { Contract } from 'ethers'
 import { PERMISSION_STORAGE_ABI } from '../abis/permissionStorage'
 import { WalletInjectionKey } from '../injectionKeys'
+import { isEthersUserRejectedError } from '../utils/ethersTxError'
 
 /** Sepolia 上部署的合约地址，在 web3-dapp/.env 中配置 VITE_PERMISSION_STORAGE_ADDRESS */
 function contractAddress(): string | undefined {
@@ -9,14 +10,8 @@ function contractAddress(): string | undefined {
   return raw && /^0x[a-fA-F0-9]{40}$/.test(raw) ? raw : undefined
 }
 
-function rpcErrorCode(err: unknown): number | undefined {
-  if (typeof err !== 'object' || err === null || !('code' in err)) return undefined
-  const c = (err as { code?: unknown }).code
-  return typeof c === 'number' ? c : undefined
-}
-
 function formatSetPermissionError(err: unknown): string {
-  if (rpcErrorCode(err) === 4001) {
+  if (isEthersUserRejectedError(err)) {
     return '已取消签名 / 用户拒绝了交易。'
   }
   if (err instanceof Error) {
@@ -47,6 +42,8 @@ export function usePermissionStorage() {
   const writeError = ref<string | null>(null)
   const writeSubmitting = ref(false)
   const lastTxHash = ref<string | null>(null)
+  /** 最近一次成功交易所在区块（ethers `tx.wait()` 回执） */
+  const lastTxBlock = ref<number | null>(null)
 
   const configuredAddress = computed(() => contractAddress())
 
@@ -121,6 +118,7 @@ export function usePermissionStorage() {
   async function submitSetPermission() {
     writeError.value = null
     lastTxHash.value = null
+    lastTxBlock.value = null
 
     const ca = configuredAddress.value
     if (!ca) {
@@ -159,10 +157,22 @@ export function usePermissionStorage() {
       const cWrite = new Contract(ca, PERMISSION_STORAGE_ABI, signer)
       const tx = await cWrite.setPermission(target, writeAllowed.value)
       lastTxHash.value = tx.hash
-      await tx.wait()
+      const receipt = await tx.wait()
+      if (!receipt) {
+        writeError.value = '未拿到交易回执，请稍后在浏览器查看交易状态。'
+        return
+      }
+      // Sepolia 为 EIP-155 链，status 为 1 成功 / 0 回滚；极少数 legacy 回执可能为 null
+      if (receipt.status === 0) {
+        writeError.value =
+          '交易已打包但执行失败（链上 revert）。可在 Etherscan 查看回执详情。'
+        return
+      }
+      lastTxBlock.value = receipt.blockNumber
     } catch (e: unknown) {
       writeError.value = formatSetPermissionError(e)
       lastTxHash.value = null
+      lastTxBlock.value = null
     } finally {
       writeSubmitting.value = false
     }
@@ -181,6 +191,7 @@ export function usePermissionStorage() {
     writeError,
     writeSubmitting,
     lastTxHash,
+    lastTxBlock,
     isOwnerWallet,
     canSubmitWrite,
     submitSetPermission

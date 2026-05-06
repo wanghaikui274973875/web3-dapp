@@ -14,6 +14,7 @@ const {
   writeError,
   writeSubmitting,
   lastTxHash,
+  lastTxBlock,
   isOwnerWallet,
   canSubmitWrite,
   submitSetPermission
@@ -109,8 +110,19 @@ const {
     </button>
 
     <p v-if="writeError" class="error">{{ writeError }}</p>
-    <p v-if="lastTxHash" class="success">
-      已上链。
+    <p v-if="writeError && lastTxHash" class="tx-failed-hint">
+      可在
+      <a
+        :href="`https://sepolia.etherscan.io/tx/${lastTxHash}`"
+        target="_blank"
+        rel="noreferrer"
+        >Etherscan</a
+      >
+      查看该笔交易与回执。
+      <code class="tx-hash">{{ lastTxHash }}</code>
+    </p>
+    <p v-if="lastTxBlock !== null" class="success">
+      交易已确认（区块 #{{ lastTxBlock }}）。
       <a
         :href="`https://sepolia.etherscan.io/tx/${lastTxHash}`"
         target="_blank"
@@ -178,6 +190,18 @@ h2 {
     border-color: rgba(248, 113, 113, 0.45);
     background: rgba(248, 113, 113, 0.12);
   }
+}
+
+.tx-failed-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.tx-failed-hint a {
+  color: var(--accent);
+  margin-right: 0.25rem;
 }
 
 .success {

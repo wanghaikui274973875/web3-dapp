@@ -3,6 +3,7 @@ import { onMounted, provide } from 'vue'
 import { useWallet } from './composables/useWallet'
 import { WalletInjectionKey } from './injectionKeys'
 import PermissionStoragePanel from './components/PermissionStoragePanel.vue'
+import SimpleStoragePanel from './components/SimpleStoragePanel.vue'
 
 const wallet = useWallet()
 provide(WalletInjectionKey, wallet)
@@ -106,6 +107,7 @@ onMounted(() => {
       </p>
     </section>
 
+    <SimpleStoragePanel />
     <PermissionStoragePanel />
   </div>
 </template>

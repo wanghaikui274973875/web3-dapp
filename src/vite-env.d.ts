@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_PERMISSION_STORAGE_ADDRESS?: string
+  readonly VITE_SIMPLE_STORAGE_ADDRESS?: string
 }
 
 import type { Eip1193Provider } from 'ethers'
