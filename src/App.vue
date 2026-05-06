@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, provide } from 'vue'
 import { useWallet } from './composables/useWallet'
+import { WalletInjectionKey } from './injectionKeys'
+import PermissionStoragePanel from './components/PermissionStoragePanel.vue'
+
+const wallet = useWallet()
+provide(WalletInjectionKey, wallet)
 
 const {
   address,
@@ -13,15 +18,13 @@ const {
   connect,
   refreshBalance,
   switchToSepolia,
-  trySilentReconnect,
-  registerListeners,
   sepoliaChainId
-} = useWallet()
+} = wallet
 
-registerListeners()
+wallet.registerListeners()
 
 onMounted(() => {
-  void trySilentReconnect()
+  void wallet.trySilentReconnect()
 })
 </script>
 
@@ -29,7 +32,7 @@ onMounted(() => {
   <div class="wallet-app">
     <header class="wallet-header">
       <h1>Web3 DApp</h1>
-      <p class="lead">Vue 3 + ethers.js v6 · MetaMask（Day 18–19）</p>
+      <p class="lead">Vue 3 + ethers.js v6 · MetaMask</p>
     </header>
 
     <section class="wallet-card">
@@ -102,6 +105,8 @@ onMounted(() => {
         领取。
       </p>
     </section>
+
+    <PermissionStoragePanel />
   </div>
 </template>
 

@@ -1,5 +1,9 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  readonly VITE_PERMISSION_STORAGE_ADDRESS?: string
+}
+
 import type { Eip1193Provider } from 'ethers'
 
 type EthereumProvider = Eip1193Provider & {
