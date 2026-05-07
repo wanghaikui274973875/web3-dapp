@@ -112,6 +112,40 @@ src/
 
 ---
 
+## 界面演示截图
+
+以下图片与 **[Hardhat 仓库 `docs/dapp-screenshots/`](../hardhat/docs/dapp-screenshots/)** 中为同一组资源（相对路径以本 `web3-dapp/README.md` 为基准）。在 GitHub 上若只打开 `web3-dapp` 子目录，也可在此直接预览效果；更完整的文字说明见 [Hardhat README](../hardhat/README.md) 中的「前端联调演示截图」章节。
+
+### 1. 钱包与网络
+
+![Web3 DApp 钱包与 Sepolia 网络](../hardhat/docs/dapp-screenshots/01-wallet-sepolia.png)
+
+### 2. SimpleStorage
+
+![SimpleStorage 面板](../hardhat/docs/dapp-screenshots/02-simple-storage.png)
+
+### 3. MemoStorage
+
+![MemoStorage 面板](../hardhat/docs/dapp-screenshots/03-memo-storage.png)
+
+### 4. ERC20 转账
+
+![ERC20 转账与记录](../hardhat/docs/dapp-screenshots/04-erc20-transfer.png)
+
+### 5. GameItem 铸造
+
+![GameItem 铸造与合集信息](../hardhat/docs/dapp-screenshots/05-nft-mint.png)
+
+### 6. GameItem 列表与详情
+
+![GameItem 列表与 NFT 详情](../hardhat/docs/dapp-screenshots/06-nft-list-detail.png)
+
+### 7. PermissionStorage
+
+![PermissionStorage 面板](../hardhat/docs/dapp-screenshots/07-permission-storage.png)
+
+---
+
 ## 与 Hardhat 仓库的协作流程
 
 ```mermaid
