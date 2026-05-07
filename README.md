@@ -114,35 +114,37 @@ src/
 
 ## 界面演示截图
 
-以下图片与 **[Hardhat 仓库 `docs/dapp-screenshots/`](../hardhat/docs/dapp-screenshots/)** 中为同一组资源（相对路径以本 `web3-dapp/README.md` 为基准）。在 GitHub 上若只打开 `web3-dapp` 子目录，也可在此直接预览效果；更完整的文字说明见 [Hardhat README](../hardhat/README.md) 中的「前端联调演示截图」章节。
+截图文件位于本仓库 **`docs/screenshots/`**（与 `README.md` 相对路径如下）。这样**单独克隆 `web3-dapp`、或在 GitHub 只浏览本仓库**时，Markdown 预览仍能加载图片。
+
+若本地工作区与 `hardhat` 为同级目录，**Hardhat** 侧另有同内容副本：`hardhat/docs/dapp-screenshots/`（见 [Hardhat README](../hardhat/README.md) 中「前端联调演示截图」章节）。此前使用 `../hardhat/docs/...` 在「仅有 web3-dapp 仓库」时会找不到路径，导致裂图。
 
 ### 1. 钱包与网络
 
-![Web3 DApp 钱包与 Sepolia 网络](../hardhat/docs/dapp-screenshots/01-wallet-sepolia.png)
+![Web3 DApp 钱包与 Sepolia 网络](docs/screenshots/01-wallet-sepolia.png)
 
 ### 2. SimpleStorage
 
-![SimpleStorage 面板](../hardhat/docs/dapp-screenshots/02-simple-storage.png)
+![SimpleStorage 面板](docs/screenshots/02-simple-storage.png)
 
 ### 3. MemoStorage
 
-![MemoStorage 面板](../hardhat/docs/dapp-screenshots/03-memo-storage.png)
+![MemoStorage 面板](docs/screenshots/03-memo-storage.png)
 
 ### 4. ERC20 转账
 
-![ERC20 转账与记录](../hardhat/docs/dapp-screenshots/04-erc20-transfer.png)
+![ERC20 转账与记录](docs/screenshots/04-erc20-transfer.png)
 
 ### 5. GameItem 铸造
 
-![GameItem 铸造与合集信息](../hardhat/docs/dapp-screenshots/05-nft-mint.png)
+![GameItem 铸造与合集信息](docs/screenshots/05-nft-mint.png)
 
 ### 6. GameItem 列表与详情
 
-![GameItem 列表与 NFT 详情](../hardhat/docs/dapp-screenshots/06-nft-list-detail.png)
+![GameItem 列表与 NFT 详情](docs/screenshots/06-nft-list-detail.png)
 
 ### 7. PermissionStorage
 
-![PermissionStorage 面板](../hardhat/docs/dapp-screenshots/07-permission-storage.png)
+![PermissionStorage 面板](docs/screenshots/07-permission-storage.png)
 
 ---
 
