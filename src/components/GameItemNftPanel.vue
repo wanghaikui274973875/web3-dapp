@@ -7,6 +7,9 @@ const {
   collectionSymbol,
   totalMinted,
   myBalance,
+  mintCapPerWallet,
+  myMintCount,
+  atMintCap,
   metaError,
   loadingMeta,
   configuredAddress,
@@ -88,14 +91,22 @@ const selectedUriExternal = computed(() => {
         <dt>我的持有量</dt>
         <dd><code>{{ myBalance ?? '—' }}</code></dd>
       </div>
+      <div>
+        <dt>本地址铸造额度（mint + owner 发放）</dt>
+        <dd>
+          <code>{{ myMintCount ?? '—' }} / {{ mintCapPerWallet ?? '—' }}</code>
+          <span v-if="atMintCap" class="cap-warn">已达上限，无法再 mint。</span>
+        </dd>
+      </div>
     </dl>
 
     <hr class="sep" />
 
     <h3 class="h3">铸造 NFT</h3>
     <p class="sub write-hint">
-      调用 <code>mint(tokenURI)</code>，NFT 将归当前连接地址。URI 可为 <code>https://...</code>、<code>ipfs://...</code> 或
-      <code>data:application/json;base64,...</code>（链上元数据标准）。
+      调用 <code>mint(tokenURI)</code>，NFT 归当前地址；合约使用 <code>ReentrancyGuard</code>、<code>_safeMint</code>，且每地址通过
+      mint / <code>awardItem</code> 获得的总数有上限（见上表）。URI 可为 <code>https://...</code>、<code>ipfs://...</code> 或
+      <code>data:application/json;base64,...</code>。
     </p>
     <div class="row">
       <label class="label" for="nft-uri">tokenURI</label>
@@ -311,6 +322,19 @@ h2 {
 
 .meta-dl dd {
   margin: 0;
+}
+
+.cap-warn {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #ca8a04;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cap-warn {
+    color: #facc15;
+  }
 }
 
 .row {

@@ -28,6 +28,10 @@ export function useGameItemNft() {
   const collectionSymbol = ref<string | null>(null)
   const totalMinted = ref<string | null>(null)
   const myBalance = ref<string | null>(null)
+  /** 合约常量：每地址 mint+award 上限 */
+  const mintCapPerWallet = ref<string | null>(null)
+  /** 当前钱包已通过 mint/award 计入上限的枚数 */
+  const myMintCount = ref<string | null>(null)
   const metaError = ref<string | null>(null)
   const loadingMeta = ref(false)
 
@@ -46,6 +50,11 @@ export function useGameItemNft() {
 
   const configuredAddress = computed(() => nftAddress())
 
+  const atMintCap = computed(() => {
+    if (myMintCount.value === null || mintCapPerWallet.value === null) return false
+    return BigInt(myMintCount.value) >= BigInt(mintCapPerWallet.value)
+  })
+
   const canMint = computed(
     () =>
       Boolean(
@@ -53,7 +62,8 @@ export function useGameItemNft() {
           wallet.provider.value &&
           wallet.address.value &&
           wallet.chainId.value === wallet.sepoliaChainId &&
-          !mintSubmitting.value
+          !mintSubmitting.value &&
+          !atMintCap.value
       )
   )
 
@@ -77,6 +87,8 @@ export function useGameItemNft() {
     collectionSymbol.value = null
     totalMinted.value = null
     myBalance.value = null
+    mintCapPerWallet.value = null
+    myMintCount.value = null
 
     const ca = configuredAddress.value
     if (!ca || !wallet.provider.value || wallet.chainId.value !== wallet.sepoliaChainId) {
@@ -86,14 +98,24 @@ export function useGameItemNft() {
     loadingMeta.value = true
     try {
       const c = new Contract(ca, GAME_ITEM_ABI, wallet.provider.value)
-      const [n, s, t] = await Promise.all([c.name(), c.symbol(), c.totalMinted()])
+      const [n, s, t, cap] = await Promise.all([
+        c.name(),
+        c.symbol(),
+        c.totalMinted(),
+        c.MAX_MINT_PER_WALLET()
+      ])
       collectionName.value = String(n)
       collectionSymbol.value = String(s)
       totalMinted.value = t.toString()
+      mintCapPerWallet.value = cap.toString()
 
       if (wallet.address.value) {
-        const bal = await c.balanceOf(wallet.address.value)
+        const [bal, mc] = await Promise.all([
+          c.balanceOf(wallet.address.value),
+          c.mintCountOf(wallet.address.value)
+        ])
         myBalance.value = bal.toString()
+        myMintCount.value = mc.toString()
       }
     } catch (e: unknown) {
       metaError.value = e instanceof Error ? e.message : '读取合集信息失败'
@@ -243,6 +265,9 @@ export function useGameItemNft() {
     collectionSymbol,
     totalMinted,
     myBalance,
+    mintCapPerWallet,
+    myMintCount,
+    atMintCap,
     metaError,
     loadingMeta,
     configuredAddress,
