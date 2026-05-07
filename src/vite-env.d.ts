@@ -3,6 +3,9 @@
 interface ImportMetaEnv {
   readonly VITE_PERMISSION_STORAGE_ADDRESS?: string
   readonly VITE_SIMPLE_STORAGE_ADDRESS?: string
+  readonly VITE_MEMO_STORAGE_ADDRESS?: string
+  readonly VITE_SAMPLE_ERC20_ADDRESS?: string
+  readonly VITE_GAME_ITEM_NFT_ADDRESS?: string
 }
 
 import type { Eip1193Provider } from 'ethers'

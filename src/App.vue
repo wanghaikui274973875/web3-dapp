@@ -4,6 +4,9 @@ import { useWallet } from './composables/useWallet'
 import { WalletInjectionKey } from './injectionKeys'
 import PermissionStoragePanel from './components/PermissionStoragePanel.vue'
 import SimpleStoragePanel from './components/SimpleStoragePanel.vue'
+import MemoStoragePanel from './components/MemoStoragePanel.vue'
+import SampleErc20Panel from './components/SampleErc20Panel.vue'
+import GameItemNftPanel from './components/GameItemNftPanel.vue'
 
 const wallet = useWallet()
 provide(WalletInjectionKey, wallet)
@@ -108,6 +111,9 @@ onMounted(() => {
     </section>
 
     <SimpleStoragePanel />
+    <MemoStoragePanel />
+    <SampleErc20Panel />
+    <GameItemNftPanel />
     <PermissionStoragePanel />
   </div>
 </template>
